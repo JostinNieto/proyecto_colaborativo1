@@ -1,0 +1,195 @@
+/* -------- RESET Y BASE -------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #dbeafe, #f0fdf4);
+  padding: 40px;
+  min-height: 100vh;
+}
+
+/* -------- CONTAINERS -------- */
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 60px;
+  }
+
+  .task-section,
+  .project-section {
+    flex: 1;
+  }
+}
+
+/* -------- HEADERS -------- */
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #1e3a8a;
+}
+
+/* -------- FORM -------- */
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* -------- BUTTON -------- */
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #16244a;
+}
+
+.task-section {
+  background-color: #ffffffcc;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  max-width: 450px;
+}
+
+.task-card {
+  background-color: #f1f5f9;
+  padding: 20px;
+  border-left: 6px solid #16244a;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
+.task-card
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #2c2d30, #48ba6b);
+  padding: 40px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #227062;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 60px;
+  }
+
+  .task-section,
+  .project-section {
+    flex: 1;
+  }
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #050a19;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+/* -------- TASKS -------- */
+.task-section {
+  background-color: #ffffffcc;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  max-width: 450px;
+}
+
+.task-card {
+  background-color: #092a4b;
+  padding: 20px;
+  border-left: 6px solid #3b82f6;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  transition: transform 0.2s ease;
+}
+
