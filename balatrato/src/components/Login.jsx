@@ -8,7 +8,6 @@ export default function Login() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // Aquí puedes poner tu lógica real de validación
     if (usuario === 'admin' && clave === '1234') {
       setMensaje('Inicio de sesión exitoso ✅')
     } else {
