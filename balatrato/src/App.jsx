@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Login from './components/Login'
+import TaskManager from './components/TaskManager'
 
 import './components/proyecto.css'
 
@@ -14,7 +15,9 @@ function App() {
         <Login onLogin={setUsuarioActual} />
       ) : (
         <>
+        <div className="main-content"></div>
           <p>Bienvenido, {usuarioActual} 👋</p>
+           <TaskManager />
         </>
       )}
     </div>
