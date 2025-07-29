@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 export default function ProjectManager() {
   const [proyectos, setProyectos] = useState([]);
-  const [db, setDb] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [proyectoActual, setProyectoActual] = useState(null);
 
@@ -16,67 +15,22 @@ export default function ProjectManager() {
   });
 
   // ===============================
-  // INICIALIZAR BASE DE DATOS
+  // CARGAR PROYECTOS AL INICIO
   // ===============================
   useEffect(() => {
-    const request = indexedDB.open("GestorProyectosDB", 1);
-
-    request.onupgradeneeded = (e) => {
-      const database = e.target.result;
-      database.createObjectStore("proyectos", {
-        keyPath: "id",
-        autoIncrement: true
-      });
-    };
-
-    request.onsuccess = (e) => {
-      const database = e.target.result;
-      setDb(database);
-    };
-
-    request.onerror = () => {
-      console.error("Error al abrir IndexedDB");
-    };
+    const proyectosGuardados = JSON.parse(localStorage.getItem('proyectos')) || [];
+    setProyectos(proyectosGuardados);
   }, []);
 
-  useEffect(() => {
-    if (db) cargarProyectosDesdeDB();
-  }, [db]);
-
-  function cargarProyectosDesdeDB() {
-    const transaction = db.transaction(["proyectos"], "readonly");
-    const store = transaction.objectStore("proyectos");
-    const request = store.getAll();
-
-    request.onsuccess = () => {
-      setProyectos(request.result);
-    };
-  }
-
-  function guardarProyectoEnDB(proyecto, esNuevo) {
-    const transaction = db.transaction(["proyectos"], "readwrite");
-    const store = transaction.objectStore("proyectos");
-
-    if (esNuevo) {
-      store.add(proyecto);
-    } else {
-      store.put(proyecto);
-    }
-
-    transaction.oncomplete = () => {
-      cargarProyectosDesdeDB();
-    };
+  function guardarProyectosEnLocalStorage(nuevosProyectos) {
+    setProyectos(nuevosProyectos);
+    localStorage.setItem('proyectos', JSON.stringify(nuevosProyectos));
   }
 
   function eliminarProyecto(id) {
     if (confirm("¿Estás seguro de que quieres eliminar este proyecto?")) {
-      const transaction = db.transaction(["proyectos"], "readwrite");
-      const store = transaction.objectStore("proyectos");
-      store.delete(id);
-
-      transaction.oncomplete = () => {
-        cargarProyectosDesdeDB();
-      };
+      const nuevosProyectos = proyectos.filter(p => p.id !== id);
+      guardarProyectosEnLocalStorage(nuevosProyectos);
     }
   }
 
@@ -121,12 +75,19 @@ export default function ProjectManager() {
     }
 
     if (nombre && integrantes && telefono && fechaInicio && fechaFin && descripcion) {
-      const proyectoAGuardar = { ...formProyecto };
       if (proyectoActual) {
-        guardarProyectoEnDB(proyectoAGuardar, false);
+        const nuevosProyectos = proyectos.map(p =>
+          p.id === proyectoActual.id ? { ...formProyecto, id: proyectoActual.id } : p
+        );
+        guardarProyectosEnLocalStorage(nuevosProyectos);
       } else {
-        guardarProyectoEnDB(proyectoAGuardar, true);
+        const nuevoProyecto = {
+          ...formProyecto,
+          id: Date.now() // ID simple basado en timestamp
+        };
+        guardarProyectosEnLocalStorage([...proyectos, nuevoProyecto]);
       }
+
       cerrarModal();
     } else {
       alert("Por favor completa todos los campos.");

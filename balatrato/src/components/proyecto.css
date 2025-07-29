@@ -22,9 +22,17 @@ body {
 
 .main-content {
   display: flex;
-  flex-direction: column;
-  gap: 40px;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
+
+.task-section, .project-section {
+  flex: 1;
+  min-width: 300px;
+}
+
 
 @media (min-width: 768px) {
   .main-content {
@@ -270,9 +278,7 @@ button:hover {
 .complete-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
-}
-
-
+  }
 
 
 
@@ -538,5 +544,3 @@ button {
   cursor: pointer;
   font-weight: bold;
 }
-
-

@@ -14,16 +14,22 @@ export default function Login({ onLogin }) {
   const [correo, setCorreo] = useState('')
   const [confirmarClave, setConfirmarClave] = useState('')
 
+  // Control para evitar sobrescribir localStorage con []
+  const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
     const almacenados = localStorage.getItem('usuarios')
     if (almacenados) {
       setUsuarios(JSON.parse(almacenados))
     }
+    setLoaded(true)
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('usuarios', JSON.stringify(usuarios))
-  }, [usuarios])
+    if (loaded) {
+      localStorage.setItem('usuarios', JSON.stringify(usuarios))
+    }
+  }, [usuarios, loaded])
 
   const limpiarCampos = () => {
     setUsuario('')
@@ -53,7 +59,8 @@ export default function Login({ onLogin }) {
     }
 
     const nuevoUsuario = { usuario, clave, nombre, correo }
-    setUsuarios([...usuarios, nuevoUsuario])
+    const nuevosUsuarios = [...usuarios, nuevoUsuario]
+    setUsuarios(nuevosUsuarios)
     setMensaje('Cuenta creada con éxito ✅ Inicia sesión')
     setModoRegistro(false)
     limpiarCampos()
@@ -61,7 +68,8 @@ export default function Login({ onLogin }) {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    const encontrado = usuarios.find(u => u.usuario === usuario && u.clave === clave)
+    const almacenados = JSON.parse(localStorage.getItem('usuarios') || '[]')
+    const encontrado = almacenados.find(u => u.usuario === usuario && u.clave === clave)
     if (encontrado) {
       setMensaje('Inicio de sesión exitoso ✅')
       onLogin(usuario)
