@@ -271,3 +271,272 @@ button:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
+
+
+
+
+
+
+
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.project-item {
+  background-color: #f8f9fa;
+  border-left: 5px solid #007bff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.project-item:hover {
+  transform: scale(1.02);
+  background-color: #f1f3f5;
+}
+
+.project-item h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #007bff;
+}
+
+.project-item p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.project-item p strong {
+  color: #555;
+}
+
+
+.task-section,
+.project-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  min-width: 0;
+}
+
+#task-list,
+#project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #dbeafe, #f0fdf4);
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .task-section, .project-section {
+      background-color: #ffffffcc;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(6px);
+      flex: 1;
+    }
+
+    .task-section {
+      max-width: 450px;
+    }
+
+    .project-section {
+      max-width: 600px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    .task-card {
+      background-color: #f1f5f9;
+      padding: 20px;
+      border-left: 6px solid #3b82f6;
+      margin-bottom: 20px;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .task-card h3 {
+      color: #1d4ed8;
+      margin-bottom: 8px;
+    }
+
+    .task-card p {
+      margin: 4px 0;
+      color: #374151;
+    }
+
+    .complete-btn {
+      margin-top: 12px;
+      background-color: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    .complete-btn:hover {
+      background-color: #059669;
+    }
+
+    #add-project-btn {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s ease;
+    }
+
+    #add-project-btn:hover {
+      background-color: #1d4ed8;
+    }
+
+    .project-section {
+  margin-top: 30px;
+}
+
+/* Fondo general */
+body {
+  background: linear-gradient(to right, #dbeafe, #e0f2fe);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal (tarjeta de fondo) */
+.container {
+  max-width: 1000px; /* <-- Aumentado el ancho */
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenido principal */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Espacio entre las secciones de tareas y proyectos */
+}
+
+/* En pantallas grandes, ponerlas lado a lado */
+@media (min-width: 768px) {
+  .main-content {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 60px; /* Más separación horizontal */
+  }
+
+  .task-section,
+  .project-section {
+    flex: 1;
+  }
+}
+
+/* Títulos */
+h2 {
+  text-align: center;
+  color: #1e3a8a;
+}
+
+/* Botón */
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
