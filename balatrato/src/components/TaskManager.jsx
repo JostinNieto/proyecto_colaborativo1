@@ -1,155 +1,132 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-export default function TaskManager() {
-  const [tareas, setTareas] = useState(() => {
-    const tareasGuardadas = localStorage.getItem('tareas')
-    return tareasGuardadas ? JSON.parse(tareasGuardadas) : []
-  })
+function TaskManager() {
+  const [tareas, setTareas] = useState([
+    {
+      nombre: "Diseñar interfaz",
+      proyecto: "App Web CRM",
+      fechaLimite: "2025-06-01",
+      estado: "Pendiente"
+    },
+    {
+      nombre: "Revisión de código",
+      proyecto: "Sistema Contable",
+      fechaLimite: "2025-06-05",
+      estado: "En progreso"
+    },
+    {
+      nombre: "Presentar informe",
+      proyecto: "Auditoría interna",
+      fechaLimite: "2025-06-10",
+      estado: "Pendiente"
+    }
+  ])
 
-  const [mostrarModalNueva, setMostrarModalNueva] = useState(false)
-  const [mostrarModalEditar, setMostrarModalEditar] = useState(false)
-  const [tareaActual, setTareaActual] = useState(null)
+  const [tareaActualIndex, setTareaActualIndex] = useState(null)
+  const [mostrarModalAdd, setMostrarModalAdd] = useState(false)
+  const [mostrarModalEdit, setMostrarModalEdit] = useState(false)
 
-  const [nuevaTarea, setNuevaTarea] = useState({
+  const [form, setForm] = useState({
     nombre: '',
     proyecto: '',
     fechaLimite: '',
     estado: 'Pendiente'
   })
 
-  const [editarTarea, setEditarTarea] = useState({
-    nombre: '',
-    proyecto: '',
-    fechaLimite: '',
-    estado: ''
-  })
-
-  // 🔁 Guarda en localStorage cuando cambien las tareas
-  useEffect(() => {
-    localStorage.setItem('tareas', JSON.stringify(tareas))
-  }, [tareas])
-
-  const abrirModalNueva = () => {
-    setNuevaTarea({ nombre: '', proyecto: '', fechaLimite: '', estado: 'Pendiente' })
-    setMostrarModalNueva(true)
+  const abrirEditarTarea = (index) => {
+    setTareaActualIndex(index)
+    setForm(tareas[index])
+    setMostrarModalEdit(true)
   }
 
-  const cerrarModalNueva = () => setMostrarModalNueva(false)
+  const guardarEdicionTarea = () => {
+    const nuevasTareas = [...tareas]
+    nuevasTareas[tareaActualIndex] = form
+    setTareas(nuevasTareas)
+    setMostrarModalEdit(false)
+  }
 
-  const guardarNuevaTarea = (e) => {
-    e.preventDefault()
-    if (nuevaTarea.nombre && nuevaTarea.proyecto && nuevaTarea.fechaLimite) {
-      const nuevaId = tareas.length > 0 ? Math.max(...tareas.map(t => t.id || 0)) + 1 : 1
-      const nueva = { ...nuevaTarea, id: nuevaId }
-      setTareas(prev => [...prev, nueva])
-      cerrarModalNueva()
-    } else {
-      alert("Por favor completa todos los campos.")
+  const eliminarTarea = (index) => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar esta tarea?")) {
+      setTareas(tareas.filter((_, i) => i !== index))
     }
   }
 
-  const abrirModalEditar = (tarea) => {
-    setTareaActual(tarea)
-    setEditarTarea({
-      nombre: tarea.nombre,
-      proyecto: tarea.proyecto,
-      fechaLimite: tarea.fechaLimite,
-      estado: tarea.estado
-    })
-    setMostrarModalEditar(true)
+  const marcarCompletada = (index) => {
+    const nuevasTareas = [...tareas]
+    nuevasTareas[index].estado = "Completada"
+    setTareas(nuevasTareas)
   }
 
-  const cerrarModalEditar = () => {
-    setMostrarModalEditar(false)
-    setTareaActual(null)
-  }
-
-  const guardarEdicionTarea = (e) => {
-    e.preventDefault()
-    if (editarTarea.nombre && editarTarea.proyecto && editarTarea.fechaLimite) {
-      setTareas(tareas.map(t =>
-        t.id === tareaActual.id ? { ...t, ...editarTarea } : t
-      ))
-      cerrarModalEditar()
-    } else {
-      alert("Por favor completa todos los campos.")
-    }
-  }
-
-  const marcarCompletada = (id) => {
-    setTareas(tareas.map(t =>
-      t.id === id ? { ...t, estado: "Completada" } : t
-    ))
-  }
-
-  const eliminarTarea = (id) => {
-    if (confirm("¿Estás seguro de que quieres eliminar esta tarea?")) {
-      setTareas(tareas.filter(t => t.id !== id))
-    }
+  const agregarTarea = () => {
+    setTareas([...tareas, form])
+    setForm({ nombre: '', proyecto: '', fechaLimite: '', estado: 'Pendiente' })
+    setMostrarModalAdd(false)
   }
 
   return (
-    <section className="task-section">
-      <h2>Tareas Asignadas</h2>
-      <button onClick={abrirModalNueva} style={{ marginBottom: '20px' }}>
-        Añadir Tarea
-      </button>
+    <div>
+      <button id="add-task-btn" onClick={() => setMostrarModalAdd(true)}>Añadir Tarea</button>
 
       <div id="task-list">
-        {tareas.map(tarea => (
-          <div key={tarea.id} className="task-card">
+        {tareas.map((tarea, index) => (
+          <div className="task-card" key={index}>
             <h3>{tarea.nombre}</h3>
             <p><strong>Proyecto:</strong> {tarea.proyecto}</p>
             <p><strong>Fecha límite:</strong> {tarea.fechaLimite}</p>
             <p><strong>Estado:</strong> {tarea.estado}</p>
-            <div style={{ marginTop: '12px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <button onClick={() => marcarCompletada(tarea.id)} className="complete-btn" style={{ backgroundColor: '#10b981' }}>Marcar como completada</button>
-              <button onClick={() => abrirModalEditar(tarea)} className="complete-btn" style={{ backgroundColor: '#f59e0b' }}>Editar</button>
-              <button onClick={() => eliminarTarea(tarea.id)} className="complete-btn" style={{ backgroundColor: '#ef4444' }}>Eliminar</button>
-            </div>
+            <button className="complete-btn" onClick={() => marcarCompletada(index)}>Marcar como completada</button>
+            <button className="complete-btn" onClick={() => abrirEditarTarea(index)} style={{ backgroundColor: '#f59e0b' }}>Editar</button>
+            <button className="complete-btn" onClick={() => eliminarTarea(index)} style={{ backgroundColor: '#ef4444' }}>Eliminar</button>
           </div>
         ))}
       </div>
 
-      {mostrarModalNueva && (
+      {mostrarModalAdd && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close" onClick={cerrarModalNueva}>&times;</span>
+            <span className="close" onClick={() => setMostrarModalAdd(false)}>&times;</span>
             <h3>Nueva Tarea</h3>
-            <form onSubmit={guardarNuevaTarea}>
-              <input type="text" placeholder="Nombre de la tarea" value={nuevaTarea.nombre} onChange={(e) => setNuevaTarea({ ...nuevaTarea, nombre: e.target.value })} required />
-              <input type="text" placeholder="Proyecto" value={nuevaTarea.proyecto} onChange={(e) => setNuevaTarea({ ...nuevaTarea, proyecto: e.target.value })} required />
-              <input type="date" value={nuevaTarea.fechaLimite} onChange={(e) => setNuevaTarea({ ...nuevaTarea, fechaLimite: e.target.value })} required />
-              <select value={nuevaTarea.estado} onChange={(e) => setNuevaTarea({ ...nuevaTarea, estado: e.target.value })} required>
-                <option value="Pendiente">Pendiente</option>
-                <option value="En progreso">En progreso</option>
-                <option value="Completada">Completada</option>
-              </select>
-              <button type="submit">Guardar tarea</button>
-            </form>
+            <label>Nombre</label>
+            <input value={form.nombre} onChange={e => setForm({ ...form, nombre: e.target.value })} />
+            <label>Proyecto</label>
+            <input value={form.proyecto} onChange={e => setForm({ ...form, proyecto: e.target.value })} />
+            <label>Fecha límite</label>
+            <input type="date" value={form.fechaLimite} onChange={e => setForm({ ...form, fechaLimite: e.target.value })} />
+            <label>Estado</label>
+            <select value={form.estado} onChange={e => setForm({ ...form, estado: e.target.value })}>
+              <option>Pendiente</option>
+              <option>En progreso</option>
+              <option>Completada</option>
+            </select>
+            <button id="save-new-task-btn" onClick={agregarTarea}>Guardar Tarea</button>
           </div>
         </div>
       )}
 
-      {mostrarModalEditar && (
+      {mostrarModalEdit && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close" onClick={cerrarModalEditar}>&times;</span>
+            <span className="close" onClick={() => setMostrarModalEdit(false)}>&times;</span>
             <h3>Editar Tarea</h3>
-            <form onSubmit={guardarEdicionTarea}>
-              <input type="text" placeholder="Nombre de la tarea" value={editarTarea.nombre} onChange={(e) => setEditarTarea({ ...editarTarea, nombre: e.target.value })} required />
-              <input type="text" placeholder="Proyecto" value={editarTarea.proyecto} onChange={(e) => setEditarTarea({ ...editarTarea, proyecto: e.target.value })} required />
-              <input type="date" value={editarTarea.fechaLimite} onChange={(e) => setEditarTarea({ ...editarTarea, fechaLimite: e.target.value })} required />
-              <select value={editarTarea.estado} onChange={(e) => setEditarTarea({ ...editarTarea, estado: e.target.value })} required>
-                <option value="Pendiente">Pendiente</option>
-                <option value="En progreso">En progreso</option>
-                <option value="Completada">Completada</option>
-              </select>
-              <button type="submit">Guardar cambios</button>
-            </form>
+            <label>Nombre</label>
+            <input value={form.nombre} onChange={e => setForm({ ...form, nombre: e.target.value })} />
+            <label>Proyecto</label>
+            <input value={form.proyecto} onChange={e => setForm({ ...form, proyecto: e.target.value })} />
+            <label>Fecha límite</label>
+            <input type="date" value={form.fechaLimite} onChange={e => setForm({ ...form, fechaLimite: e.target.value })} />
+            <label>Estado</label>
+            <select value={form.estado} onChange={e => setForm({ ...form, estado: e.target.value })}>
+              <option>Pendiente</option>
+              <option>En progreso</option>
+              <option>Completada</option>
+            </select>
+            <button id="save-edit-task-btn" onClick={guardarEdicionTarea}>Guardar Cambios</button>
           </div>
         </div>
       )}
-    </section>
+    </div>
   )
 }
+
+export default TaskManager

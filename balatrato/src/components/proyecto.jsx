@@ -1,127 +1,117 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export default function ProjectManager() {
-  const [proyectos, setProyectos] = useState([]);
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [proyectoActual, setProyectoActual] = useState(null);
+function Proyecto() {
+  const [proyectos, setProyectos] = useState([
+    {
+      nombre: "Rediseño Web",
+      integrantes: "Juan, María",
+      telefono: "0999999999",
+      fechaInicio: "2025-05-01",
+      fechaFin: "2025-06-01",
+      descripcion: "Actualización de la interfaz web."
+    },
+    {
+      nombre: "Implementación CRM",
+      integrantes: "Pedro, Ana",
+      telefono: "0988888888",
+      fechaInicio: "2025-05-10",
+      fechaFin: "2025-07-15",
+      descripcion: "Integración de un CRM para ventas."
+    }
+  ]);
 
-  const [formProyecto, setFormProyecto] = useState({
-    nombre: '',
-    integrantes: '',
-    telefono: '',
-    fechaInicio: '',
-    fechaFin: '',
-    descripcion: ''
+  const [proyectoActualIndex, setProyectoActualIndex] = useState(null);
+  const [formulario, setFormulario] = useState({
+    nombre: "",
+    integrantes: "",
+    telefono: "",
+    fechaInicio: "",
+    fechaFin: "",
+    descripcion: ""
   });
+  const [modalAbierto, setModalAbierto] = useState(false);
 
-  // ===============================
-  // CARGAR PROYECTOS AL INICIO
-  // ===============================
-  useEffect(() => {
-    const proyectosGuardados = JSON.parse(localStorage.getItem('proyectos')) || [];
-    setProyectos(proyectosGuardados);
-  }, []);
-
-  function guardarProyectosEnLocalStorage(nuevosProyectos) {
-    setProyectos(nuevosProyectos);
-    localStorage.setItem('proyectos', JSON.stringify(nuevosProyectos));
-  }
-
-  function eliminarProyecto(id) {
-    if (confirm("¿Estás seguro de que quieres eliminar este proyecto?")) {
-      const nuevosProyectos = proyectos.filter(p => p.id !== id);
-      guardarProyectosEnLocalStorage(nuevosProyectos);
-    }
-  }
-
-  function abrirModal(proyecto = null) {
-    setProyectoActual(proyecto);
-    if (proyecto) {
-      setFormProyecto({ ...proyecto });
+  const abrirModal = (index = null) => {
+    if (index !== null) {
+      setFormulario(proyectos[index]);
+      setProyectoActualIndex(index);
     } else {
-      setFormProyecto({
-        nombre: '',
-        integrantes: '',
-        telefono: '',
-        fechaInicio: '',
-        fechaFin: '',
-        descripcion: ''
+      setFormulario({
+        nombre: "",
+        integrantes: "",
+        telefono: "",
+        fechaInicio: "",
+        fechaFin: "",
+        descripcion: ""
       });
+      setProyectoActualIndex(null);
     }
-    setMostrarModal(true);
-  }
+    setModalAbierto(true);
+  };
 
-  function cerrarModal() {
-    setMostrarModal(false);
-    setProyectoActual(null);
-  }
+  const cerrarModal = () => {
+    setModalAbierto(false);
+    setFormulario({
+      nombre: "",
+      integrantes: "",
+      telefono: "",
+      fechaInicio: "",
+      fechaFin: "",
+      descripcion: ""
+    });
+    setProyectoActualIndex(null);
+  };
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormProyecto(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  }
-
-  function guardarProyecto(e) {
-    e.preventDefault();
-    const { nombre, integrantes, telefono, fechaInicio, fechaFin, descripcion } = formProyecto;
-
-    const telefonoValido = /^\d{10}$/.test(telefono);
-    if (!telefonoValido) {
-      alert("El número de teléfono debe contener exactamente 10 dígitos.");
-      return;
-    }
+  const guardarProyecto = () => {
+    const { nombre, integrantes, telefono, fechaInicio, fechaFin, descripcion } = formulario;
 
     if (nombre && integrantes && telefono && fechaInicio && fechaFin && descripcion) {
-      if (proyectoActual) {
-        const nuevosProyectos = proyectos.map(p =>
-          p.id === proyectoActual.id ? { ...formProyecto, id: proyectoActual.id } : p
-        );
-        guardarProyectosEnLocalStorage(nuevosProyectos);
+      if (proyectoActualIndex === null) {
+        setProyectos([...proyectos, formulario]);
       } else {
-        const nuevoProyecto = {
-          ...formProyecto,
-          id: Date.now() // ID simple basado en timestamp
-        };
-        guardarProyectosEnLocalStorage([...proyectos, nuevoProyecto]);
+        const nuevosProyectos = [...proyectos];
+        nuevosProyectos[proyectoActualIndex] = formulario;
+        setProyectos(nuevosProyectos);
       }
-
       cerrarModal();
     } else {
       alert("Por favor completa todos los campos.");
     }
-  }
+  };
+
+  const eliminarProyecto = (index) => {
+    if (confirm("¿Estás seguro de que quieres eliminar este proyecto?")) {
+      const nuevosProyectos = proyectos.filter((_, i) => i !== index);
+      setProyectos(nuevosProyectos);
+    }
+  };
 
   return (
-    <section className="project-section">
-      <h2>Gestor de Proyectos</h2>
-      <button onClick={() => abrirModal()} style={{ marginBottom: '20px' }}>
+    <div>
+      <button id="add-project-btn" onClick={() => abrirModal()}>
         Añadir Proyecto
       </button>
 
       <div id="project-list">
-        {proyectos.map((proyecto) => (
-          <div key={proyecto.id} className="project-item">
+        {proyectos.map((proyecto, index) => (
+          <div className="project-item" key={index}>
             <h3>{proyecto.nombre}</h3>
             <p><strong>Integrantes:</strong> {proyecto.integrantes}</p>
             <p><strong>Teléfono:</strong> {proyecto.telefono}</p>
             <p><strong>Fecha inicio:</strong> {proyecto.fechaInicio}</p>
             <p><strong>Fecha fin:</strong> {proyecto.fechaFin}</p>
             <p><strong>Descripción:</strong> {proyecto.descripcion}</p>
-
             <button
               className="complete-btn"
-              style={{ backgroundColor: '#f59e0b' }}
-              onClick={() => abrirModal(proyecto)}
+              style={{ backgroundColor: "#f59e0b" }}
+              onClick={() => abrirModal(index)}
             >
               Editar
             </button>
             <button
               className="complete-btn"
-              style={{ backgroundColor: '#ef4444' }}
-              onClick={() => eliminarProyecto(proyecto.id)}
+              style={{ backgroundColor: "#ef4444" }}
+              onClick={() => eliminarProyecto(index)}
             >
               Eliminar
             </button>
@@ -129,64 +119,60 @@ export default function ProjectManager() {
         ))}
       </div>
 
-      {mostrarModal && (
+      {modalAbierto && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close" onClick={cerrarModal}>&times;</span>
-            <h3>{proyectoActual ? 'Editar Proyecto' : 'Nuevo Proyecto'}</h3>
-            <form onSubmit={guardarProyecto}>
-              <input
-                type="text"
-                name="nombre"
-                placeholder="Nombre del proyecto"
-                value={formProyecto.nombre}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="integrantes"
-                placeholder="Integrantes"
-                value={formProyecto.integrantes}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="text"
-                name="telefono"
-                placeholder="Teléfono (10 dígitos)"
-                value={formProyecto.telefono}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="date"
-                name="fechaInicio"
-                value={formProyecto.fechaInicio}
-                onChange={handleChange}
-                required
-              />
-              <input
-                type="date"
-                name="fechaFin"
-                value={formProyecto.fechaFin}
-                onChange={handleChange}
-                required
-              />
-              <textarea
-                name="descripcion"
-                placeholder="Descripción del proyecto"
-                value={formProyecto.descripcion}
-                onChange={handleChange}
-                required
-              />
-              <button type="submit">
-                {proyectoActual ? 'Guardar Cambios' : 'Guardar Proyecto'}
-              </button>
-            </form>
+            <span id="close-modal" className="close" onClick={cerrarModal}>&times;</span>
+
+            <input
+              id="project-name"
+              type="text"
+              placeholder="Nombre del proyecto"
+              value={formulario.nombre}
+              onChange={(e) => setFormulario({ ...formulario, nombre: e.target.value })}
+            />
+            <input
+              id="project-members"
+              type="text"
+              placeholder="Integrantes"
+              value={formulario.integrantes}
+              onChange={(e) => setFormulario({ ...formulario, integrantes: e.target.value })}
+            />
+            <input
+              id="project-phone"
+              type="text"
+              placeholder="Teléfono"
+              value={formulario.telefono}
+              onChange={(e) => setFormulario({ ...formulario, telefono: e.target.value })}
+            />
+            <input
+              id="project-start"
+              type="date"
+              value={formulario.fechaInicio}
+              onChange={(e) => setFormulario({ ...formulario, fechaInicio: e.target.value })}
+            />
+            <input
+              id="project-end"
+              type="date"
+              value={formulario.fechaFin}
+              onChange={(e) => setFormulario({ ...formulario, fechaFin: e.target.value })}
+            />
+            <textarea
+              id="project-desc"
+              placeholder="Descripción"
+              value={formulario.descripcion}
+              onChange={(e) => setFormulario({ ...formulario, descripcion: e.target.value })}
+            ></textarea>
+
+            <button id="save-project-btn" onClick={guardarProyecto}>
+              Guardar Proyecto
+            </button>
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
+
+export default Proyecto;
+  

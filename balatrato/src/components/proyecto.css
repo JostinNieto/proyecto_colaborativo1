@@ -33,7 +33,6 @@ body {
   min-width: 300px;
 }
 
-
 @media (min-width: 768px) {
   .main-content {
     flex-direction: row;
@@ -60,6 +59,7 @@ input, textarea {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+  color: #000; /* texto negro */
 }
 
 textarea {
@@ -98,13 +98,6 @@ button:hover {
   margin-bottom: 20px;
   border-radius: 12px;
   transition: transform 0.2s ease;
-}
-
-.task-card
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
@@ -155,6 +148,7 @@ input, textarea {
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
+  color: #000; /* texto negro */
 }
 
 textarea {
@@ -195,7 +189,7 @@ button:hover {
   transition: transform 0.2s ease;
 }
 
-/* Estilos hechos por Luis Flores*/
+/* Estilos hechos por Luis Flores */
 .modal {
   position: fixed;
   top: 0;
@@ -223,12 +217,14 @@ button:hover {
 }
 
 .modal-content input,
-.modal-content select {
+.modal-content select,
+.modal-content textarea {
   width: 100%;
   padding: 10px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid #100f0f;
   font-size: 14px;
+  color: #000; /* texto negro */
 }
 
 .close {
@@ -278,13 +274,7 @@ button:hover {
 .complete-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
-  }
-
-
-
-
-
-
+}
 
 .modal {
   position: fixed;
@@ -318,6 +308,7 @@ button:hover {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  color: #000; /* texto negro */
 }
 
 .modal-content textarea {
@@ -368,7 +359,6 @@ button:hover {
   color: #555;
 }
 
-
 .task-section,
 .project-section {
   flex: 1;
@@ -385,162 +375,25 @@ button:hover {
   flex-direction: column;
   gap: 15px;
 }
-
-* {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #dbeafe, #f0fdf4);
-      padding: 40px;
-      min-height: 100vh;
-    }
-
-    .main-content {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      gap: 40px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .task-section, .project-section {
-      background-color: #ffffffcc;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(6px);
-      flex: 1;
-    }
-
-    .task-section {
-      max-width: 450px;
-    }
-
-    .project-section {
-      max-width: 600px;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      text-align: center;
-      color: #1e3a8a;
-    }
-
-    .task-card {
-      background-color: #f1f5f9;
-      padding: 20px;
-      border-left: 6px solid #3b82f6;
-      margin-bottom: 20px;
-      border-radius: 12px;
-      transition: transform 0.2s ease;
-    }
-
-    .task-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .task-card h3 {
-      color: #1d4ed8;
-      margin-bottom: 8px;
-    }
-
-    .task-card p {
-      margin: 4px 0;
-      color: #374151;
-    }
-
-    .complete-btn {
-      margin-top: 12px;
-      background-color: #10b981;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s ease;
-    }
-
-    .complete-btn:hover {
-      background-color: #059669;
-    }
-
-    #add-project-btn {
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.2s ease;
-    }
-
-    #add-project-btn:hover {
-      background-color: #1d4ed8;
-    }
-
-    .project-section {
-  margin-top: 30px;
+/* === ESTILOS PARA LOGIN Y REGISTRO === */
+.container form > div {
+  margin-bottom: 15px;
 }
 
-/* Fondo general */
-body {
-  background: linear-gradient(to right, #dbeafe, #e0f2fe);
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
-}
-
-/* Contenedor principal (tarjeta de fondo) */
-.container {
-  max-width: 1000px; /* <-- Aumentado el ancho */
-  margin: 40px auto;
-  padding: 30px;
-  background: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-/* Contenido principal */
-.main-content {
-  display: flex;
-  flex-direction: column;
-  gap: 40px; /* Espacio entre las secciones de tareas y proyectos */
-}
-
-/* En pantallas grandes, ponerlas lado a lado */
-@media (min-width: 768px) {
-  .main-content {
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 60px; /* Más separación horizontal */
-  }
-
-  .task-section,
-  .project-section {
-    flex: 1;
-  }
-}
-
-/* Títulos */
-h2 {
-  text-align: center;
-  color: #1e3a8a;
-}
-
-/* Botón */
-button {
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
+.container form label {
+  color: #000; /* Etiquetas en negro */
   font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
 }
+
+.container form input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #000; /* Texto negro en inputs */
+  background-color: #fff;
+}
+

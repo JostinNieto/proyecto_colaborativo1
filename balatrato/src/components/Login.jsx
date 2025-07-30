@@ -5,26 +5,30 @@ export default function Login({ onLogin }) {
   const [modoRegistro, setModoRegistro] = useState(false)
   const [mensaje, setMensaje] = useState('')
 
-  // Campos comunes
   const [usuario, setUsuario] = useState('')
   const [clave, setClave] = useState('')
 
-  // Campos extra para registro
   const [nombre, setNombre] = useState('')
   const [correo, setCorreo] = useState('')
   const [confirmarClave, setConfirmarClave] = useState('')
 
-  // Control para evitar sobrescribir localStorage con []
   const [loaded, setLoaded] = useState(false)
 
+  
   useEffect(() => {
     const almacenados = localStorage.getItem('usuarios')
     if (almacenados) {
-      setUsuarios(JSON.parse(almacenados))
+      try {
+        setUsuarios(JSON.parse(almacenados))
+      } catch (error) {
+        console.error("Error al parsear usuarios del localStorage", error)
+        setUsuarios([])
+      }
     }
     setLoaded(true)
   }, [])
 
+  
   useEffect(() => {
     if (loaded) {
       localStorage.setItem('usuarios', JSON.stringify(usuarios))
@@ -52,15 +56,14 @@ export default function Login({ onLogin }) {
       return
     }
 
-    const yaExiste = usuarios.find(u => u.usuario === usuario)
+    const yaExiste = usuarios.some(u => u.usuario === usuario)
     if (yaExiste) {
       setMensaje('El nombre de usuario ya está en uso ❌')
       return
     }
 
     const nuevoUsuario = { usuario, clave, nombre, correo }
-    const nuevosUsuarios = [...usuarios, nuevoUsuario]
-    setUsuarios(nuevosUsuarios)
+    setUsuarios([...usuarios, nuevoUsuario])
     setMensaje('Cuenta creada con éxito ✅ Inicia sesión')
     setModoRegistro(false)
     limpiarCampos()
@@ -68,11 +71,10 @@ export default function Login({ onLogin }) {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    const almacenados = JSON.parse(localStorage.getItem('usuarios') || '[]')
-    const encontrado = almacenados.find(u => u.usuario === usuario && u.clave === clave)
+    const encontrado = usuarios.find(u => u.usuario === usuario && u.clave === clave)
     if (encontrado) {
       setMensaje('Inicio de sesión exitoso ✅')
-      onLogin(usuario)
+      onLogin(encontrado.nombre || usuario) 
       limpiarCampos()
     } else {
       setMensaje('Usuario o contraseña incorrectos ❌')
@@ -82,6 +84,7 @@ export default function Login({ onLogin }) {
   return (
     <section className="container">
       <h2>{modoRegistro ? 'Crear cuenta' : 'Iniciar sesión'}</h2>
+
       <form onSubmit={modoRegistro ? handleRegistro : handleLogin}>
         {modoRegistro && (
           <>
@@ -91,7 +94,6 @@ export default function Login({ onLogin }) {
                 type="text"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                required
               />
             </div>
             <div>
@@ -100,7 +102,6 @@ export default function Login({ onLogin }) {
                 type="email"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
-                required
               />
             </div>
           </>
@@ -112,7 +113,6 @@ export default function Login({ onLogin }) {
             type="text"
             value={usuario}
             onChange={(e) => setUsuario(e.target.value)}
-            required
           />
         </div>
 
@@ -122,7 +122,6 @@ export default function Login({ onLogin }) {
             type="password"
             value={clave}
             onChange={(e) => setClave(e.target.value)}
-            required
           />
         </div>
 
@@ -133,7 +132,6 @@ export default function Login({ onLogin }) {
               type="password"
               value={confirmarClave}
               onChange={(e) => setConfirmarClave(e.target.value)}
-              required
             />
           </div>
         )}
