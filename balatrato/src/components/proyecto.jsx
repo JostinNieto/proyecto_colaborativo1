@@ -88,6 +88,7 @@ function Proyecto() {
 
   return (
     <div>
+      <h2>Proyectos</h2>
       <button id="add-project-btn" onClick={() => abrirModal()}>
         Añadir Proyecto
       </button>

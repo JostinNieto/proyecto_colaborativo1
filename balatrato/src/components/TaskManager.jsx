@@ -66,6 +66,7 @@ function TaskManager() {
 
   return (
     <div>
+    <h2>Tareas Asignadas</h2>
       <button id="add-task-btn" onClick={() => setMostrarModalAdd(true)}>Añadir Tarea</button>
 
       <div id="task-list">
