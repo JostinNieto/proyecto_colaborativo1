@@ -397,9 +397,6 @@ button:hover {
   background-color: #fff;
 }
 
-/* === ESTILOS UNIFICADOS PARA TAREAS Y PROYECTOS === */
-
-/* Unificar diseño de project-item con task-card */
 .project-item {
   background-color: #f1f5f9 !important;
   border-left: 6px solid #3b82f6 !important;
@@ -431,7 +428,7 @@ button:hover {
   color: #555;
 }
 
-/* Asegurar que task-card tenga el mismo estilo */
+
 .task-card {
   background-color: #f1f5f9 !important;
   padding: 20px;
@@ -442,7 +439,6 @@ button:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* Títulos consistentes */
 .task-section h2,
 .project-section h2 {
   margin-bottom: 20px;
@@ -451,7 +447,6 @@ button:hover {
   font-size: 24px;
 }
 
-/* Botones principales consistentes */
 #add-task-btn,
 button[style*="marginBottom"] {
   background-color: #2563eb !important;
